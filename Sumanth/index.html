@@ -1,0 +1,316 @@
+<html>
+<head><title> 01 Knapsack</title>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/h5bp.css">
+<style type='text/css'>
+#items_list input{
+	width:50px;
+}
+#items_list input.name{
+	width:80px;
+}
+</style>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="ga.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-27120534-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</head>
+<body onload='init();'>
+
+<input type="button" value="Solve Knapsack Problem" onclick="knapsack_init();">&nbsp;&nbsp;
+<label>&nbsp;Selection:
+<select id="selection">
+<option>rank</option>
+<option>tournament</option>
+</select>
+</label>
+<input type="button" style="color:red;" value="Stop" onclick="stop();">&nbsp;&nbsp;
+
+<br>
+
+<div style="width:62%;float:left;">
+<div id="status"></div>
+<div id="result"></div>
+</div>
+<div style="float:right;width:37%;">
+<h3>Settings</h3>
+<label>Knapsack capacity:<input id='max_weight' type='text' value='400'></label><br>
+
+<p>Items:</p>
+<button id='add_item_button' onclick='add_item();'>Add</button>
+<button id='remove_item_button' onclick='remove_item();'>Remove</button>
+
+<table style='list-style-type:none;'>
+<thead>
+<tr><td>Name</td><td>Weight</td><td>Value</td><td>Bound</td></tr>
+</thead>
+<tbody id='items_list'>
+<tr>
+<td><input type='text' class='name' value='map'></td>
+<td><input type='text' class='weight' value='9'></td>
+<td><input type='text' class='value' value='150'></td>
+<td><input type='text' class='bound' value='1'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='compass'></td>
+<td><input type='text' class='weight' value='13'></td>
+<td><input type='text' class='value' value='35'></td>
+<td><input type='text' class='bound' value='1'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='water'></td>
+<td><input type='text' class='weight' value='153'></td>
+<td><input type='text' class='value' value='200'></td>
+<td><input type='text' class='bound' value='2'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='sandwich'></td>
+<td><input type='text' class='weight' value='50'></td>
+<td><input type='text' class='value' value='60'></td>
+<td><input type='text' class='bound' value='2'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='glucose'></td>
+<td><input type='text' class='weight' value='15'></td>
+<td><input type='text' class='value' value='60'></td>
+<td><input type='text' class='bound' value='2'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='tin'></td>
+<td><input type='text' class='weight' value='68'></td>
+<td><input type='text' class='value' value='45'></td>
+<td><input type='text' class='bound' value='3'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='banana'></td>
+<td><input type='text' class='weight' value='27'></td>
+<td><input type='text' class='value' value='60'></td>
+<td><input type='text' class='bound' value='3'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='apple'></td>
+<td><input type='text' class='weight' value='39'></td>
+<td><input type='text' class='value' value='40'></td>
+<td><input type='text' class='bound' value='3'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='cheese'></td>
+<td><input type='text' class='weight' value='23'></td>
+<td><input type='text' class='value' value='30'></td>
+<td><input type='text' class='bound' value='1'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='beer'></td>
+<td><input type='text' class='weight' value='52'></td>
+<td><input type='text' class='value' value='10'></td>
+<td><input type='text' class='bound' value='3'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='suntan cream'></td>
+<td><input type='text' class='weight' value='11'></td>
+<td><input type='text' class='value' value='70'></td>
+<td><input type='text' class='bound' value='1'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='camera'></td>
+<td><input type='text' class='weight' value='32'></td>
+<td><input type='text' class='value' value='30'></td>
+<td><input type='text' class='bound' value='1'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='t-shirt'></td>
+<td><input type='text' class='weight' value='24'></td>
+<td><input type='text' class='value' value='15'></td>
+<td><input type='text' class='bound' value='2'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='trousers'></td>
+<td><input type='text' class='weight' value='48'></td>
+<td><input type='text' class='value' value='10'></td>
+<td><input type='text' class='bound' value='2'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='umbrella'></td>
+<td><input type='text' class='weight' value='73'></td>
+<td><input type='text' class='value' value='40'></td>
+<td><input type='text' class='bound' value='1'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='waterproof trousers'></td>
+<td><input type='text' class='weight' value='42'></td>
+<td><input type='text' class='value' value='70'></td>
+<td><input type='text' class='bound' value='1'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='waterproof overclothes'></td>
+<td><input type='text' class='weight' value='43'></td>
+<td><input type='text' class='value' value='75'></td>
+<td><input type='text' class='bound' value='1'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='note-case'></td>
+<td><input type='text' class='weight' value='22'></td>
+<td><input type='text' class='value' value='80'></td>
+<td><input type='text' class='bound' value='1'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='sunglasses'></td>
+<td><input type='text' class='weight' value='7'></td>
+<td><input type='text' class='value' value='20'></td>
+<td><input type='text' class='bound' value='1'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='towel'></td>
+<td><input type='text' class='weight' value='18'></td>
+<td><input type='text' class='value' value='12'></td>
+<td><input type='text' class='bound' value='2'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='socks'></td>
+<td><input type='text' class='weight' value='4'></td>
+<td><input type='text' class='value' value='50'></td>
+<td><input type='text' class='bound' value='1'></td>
+</tr>
+<tr>
+<td><input type='text' class='name' value='book'></td>
+<td><input type='text' class='weight' value='30'></td>
+<td><input type='text' class='value' value='10'></td>
+<td><input type='text' class='bound' value='2'></td>
+</tr>
+</tbody>
+</table>
+</div>
+<br>
+<div style='clear:both;'>
+<h2>Purpose</h2>
+<!-- <p>The goal of this application is to use a genetic algorithm to find a solution to the <a href='http://en.wikipedia.org/wiki/Knapsack_problem'>Knapsack problem</a>.</p>
+<h2>Genetic Algorithm</h2>
+<p>Genetic Algorithms work by creating a population of randomly generated possible solutions to a problem. Each individual competes against others to see who will reproduce based on a fitness which is determined by how close an individual is to the best solution. Two individuals are selected, and their genetic material (pieces of the possible answer) are combined randomly. As each generation passes, the solutions evolve closer to the ideal answer. The "correct" answer may never be found, but a "close enough" answer usually is.</p>
+<p>Once the optimal solution is found, the algorithm continues to search, because it doesn't know if it has found the best answer yet. In order to avoid searching forever, we limit the number of generations before stopping the search.</p>
+<h2>Sample Data Solution</h2>
+<p>To verify the performance of the genetic algorithm, the actual solution is provided below:</p>
+<table>
+<tbody><tr>
+<td><b>Count</b>
+</td>
+<td><b>Item</b>
+</td>
+<th>unit weight
+</th>
+<th>unit value
+</th></tr>
+<tr>
+<td>1
+</td>
+<td>map
+</td>
+<td>9
+</td>
+<td>150
+</td></tr>
+<tr>
+<td>1
+</td>
+<td>compass
+</td>
+<td>13
+</td>
+<td>35
+</td></tr>
+<tr>
+<td>1
+</td>
+<td>water
+</td>
+<td>153
+</td>
+<td>200
+</td></tr>
+<tr>
+<td>2
+</td>
+<td>glucose
+</td>
+<td>15
+</td>
+<td>60
+</td></tr>
+<tr>
+<td>3
+</td>
+<td>banana
+</td>
+<td>27
+</td>
+<td>60
+</td></tr>
+<tr>
+<td>1
+</td>
+<td>cheese
+</td>
+<td>23
+</td>
+<td>30
+</td></tr>
+<tr>
+<td>1
+</td>
+<td>suntan, cream
+</td>
+<td>11
+</td>
+<td>70
+</td></tr>
+<tr>
+<td>1
+</td>
+<td>waterproof, overclothes
+</td>
+<td>43
+</td>
+<td>75
+</td></tr>
+<tr>
+<td>1
+</td>
+<td>note-case
+</td>
+<td>22
+</td>
+<td>80
+</td></tr>
+<tr>
+<td>1
+</td>
+<td>sunglasses
+</td>
+<td>7
+</td>
+<td>20
+</td></tr>
+<tr>
+<td>1
+</td>
+<td>socks
+</td>
+<td>4
+</td>
+<td>50
+</td></tr></tbody></table>
+<p>Total value: 1010<br>Total weight: 396</p>
+</div>
+<footer>
+	<! Built by <a href="http://louisbourque.ca/">Louis Bourque</a>. -->
+<!-- </footer> --> -->
+</body>
+</html>
