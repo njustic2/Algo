@@ -1,0 +1,65 @@
+#encryptButton, #decryptButton {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin-top: 40px;
+}
+
+#roundDataContainer {
+	margin-top: 50px;
+	padding: 0px;
+}
+
+#roundDataController {
+	float: right;
+	font-size: 15pt;
+}
+
+.panel-heading {
+	height: 65px;
+	text-align: center;
+}
+
+#panelHeader {
+	font-size: 19pt;
+	vertical-align: middle;
+}
+
+#outputContainer {
+	margin-top: 30px;
+}
+
+#mainContainer {
+	margin-top: 10px;
+	margin-bottom: 50px;
+}
+
+#roundInfoTable {
+	margin: 15px;
+	max-width: 97%;
+	text-align: center;
+}
+
+#roundNumberLabel {
+	margin-left: 20px;
+}
+
+h1, h4 {
+	text-align: center;
+}
+
+#exampleContainer {
+	border-right: 1px solid #eee;
+}
+
+* {
+	font-family: 'Source Sans Pro', sans-serif;
+	letter-spacing: 1px;
+}
+
+td {
+	min-width: 43px;
+}
+
+footer {
+	text-align: center;
+}
